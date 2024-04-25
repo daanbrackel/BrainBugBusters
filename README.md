@@ -1,62 +1,64 @@
 # BrainBugBusters
 This tool was specifically designed to analyse clinical samples from FFPE specimens, however it can be used to analyse any bacterial sample. The outcome of this tool will result in a stacked barplot showing the abundance of every species and/or genus in your sample. This tool was designed with Oxford Nanopore sequencing reads (MinION), and was not tested with any other sequencing data. The input should be a folder containing all barcodes in a fastq.gz format. 
 
-# Installing plotly and EMU
+# Installing EMU and all needed scripts/dependencies
 
-### Create an environment for python v3.7
+### Start by making a python environment:
+
 ```
 conda create --name py37 python=3.7
 ``` 
-
 ```
 conda activate py37
 ```
 
-### Install plotly in your py37 environment
+### Then install plotly and osfclient
 ```
 pip install plotly
 ```
-### Install Emu
-do this in the direction you would like to install EMU in (for instance your programs folder)
+```
+pip install osfclient
+```
+
+### Assuming you’re in your home directory, make an EMU folder
+
+```
+mkdir EMU
+```
+
+### Now run this command from your home directory:
+
+```
+pip install osfclient
+export EMU_DATABASE_DIR=EMU
+cd ${EMU_DATABASE_DIR}
+osf -p 56uf7 fetch osfstorage/emu-prebuilt/emu.tar
+tar -xvf emu.tar
+```
+
+### Now install EMU:
 
 ```
 conda config --add channels defaults
-```
-```
 conda config --add channels bioconda
-```
-```
 conda config --add channels conda-forge
-```
-```
 conda install emu
 ```
 
-# Installing all needed scripts
-Install all needed scripts (EMU_loop_script.py, GhostCode.py).
+### Install all needed scripts
 ```
 git clone https://github.com/daanbrackel/BrainBugBusters
+cd BrainBugBusters
 ```
 # Running the full pipeline
-- start of by running the EMU_loop_script.py script. you can do this as followed (assuming your in the BrainBugBusters directorie where all scripts are located):
+- Run the GhostCode.py (assuming your in the BrainBugBusters directory):
   ```
-  python EMU_loop_script.py "input_folder" "output_folder" "emu_database_dir"
+  python GhostCode.py "input_folder" "output_folder" "emu_database_dir" --threads 12
   ```
-  the input folder must be a folder containing all barcode files in a fastq.gz format
+  the input folder must be a folder containing all barcode files in a fastq.gz format. The "emu_database_dir" is the EMU/ folder you made earlier in your home directory.
   
   or enter 
   ```
-  python EMU_loop_script.py --help
-  ```
-  for an explenation what each in/output is.
-
-- Next run the GhostCode.py script to visualize all data. As input you should use the output folder of the previous script. The output folder **can not** be the same as the input folder, a different folder can be made by the user. Assuming your still in the BrainBugBuster directorie, use:
-
-  ```
-  python GhostCode.py "input_folder" "output_folder"
-  ```
-  or enter 
-  ```
-  python BBB.py --help
+  python GhostCode.py --help
   ```
   for an explenation what each in/output is.
